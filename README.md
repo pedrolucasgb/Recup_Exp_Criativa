@@ -139,7 +139,6 @@ Recup_Exp_Criativa/
 │   ├── main.py                      # Arquivo principal da aplicação
 │   ├── database.sql                 # Script SQL para criação do banco
 │   ├── README.md                    # Documentação interna
-│   ├── CORRECOES_APLICADAS.md      # Log de correções
 │   │
 │   ├── controllers/                 # Controladores (Blueprints)
 │   │   ├── auth_controller.py      # Autenticação e usuários
@@ -318,7 +317,7 @@ Registro de pagamentos das comandas.
 | comanda_id       | INT (FK)     | ID da comanda                           |
 | valor            | FLOAT        | Valor do pagamento                      |
 | forma_pagamento  | VARCHAR(50)  | 'cartao_credito', 'cartao_debito', 'pix'|
-| status           | VARCHAR(20)  | 'pendente', 'aprovado', 'cancelado'     |
+| status           | VARCHAR(20)  | 'pendente', 'aprovado'                 |
 | processado_por_id| INT (FK)     | ID do usuário que processou             |
 | observacoes      | VARCHAR(255) | Observações adicionais                  |
 | created_at       | TIMESTAMP    | Data de criação                         |
@@ -330,7 +329,7 @@ Registro de pagamentos das comandas.
 usuarios (1) ──────< (N) comandas
 comandas (1) ──────< (N) itens_comanda
 itens_cardapio (1) ─< (N) itens_comanda
-comandas (1) ──────< (N) pagamentos
+comandas (1) ──────< (1) pagamentos
 usuarios (1) ──────< (N) pagamentos (processado_por)
 ```
 
