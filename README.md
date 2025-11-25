@@ -329,7 +329,7 @@ Registro de pagamentos das comandas.
 usuarios (1) ──────< (N) comandas
 comandas (1) ──────< (N) itens_comanda
 itens_cardapio (1) ─< (N) itens_comanda
-comandas (1) ──────< (N) pagamentos
+comandas (1) ──────< (1) pagamentos
 usuarios (1) ──────< (N) pagamentos (processado_por)
 ```
 
