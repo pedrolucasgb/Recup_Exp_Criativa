@@ -204,25 +204,3 @@ def ativar_usuario(usuario_id):
         flash(f'Erro ao ativar usuário: {result}', 'error')
     
     return redirect(url_for('auth.gerenciar_usuarios'))
-
-@auth_bp.route('/remover-usuario/<int:usuario_id>', methods=['POST'])
-@login_required
-def remover_usuario(usuario_id):
-    """Remover permanentemente um usuário - exclusivo para caixa"""
-    if not current_user.is_caixa():
-        flash('Acesso negado. Apenas caixa pode remover usuários.', 'error')
-        return redirect(url_for('auth.dashboard'))
-    
-    # Não permitir remover a si mesmo
-    if usuario_id == current_user.id:
-        flash('Você não pode remover sua própria conta.', 'error')
-        return redirect(url_for('auth.gerenciar_usuarios'))
-    
-    success, result = Usuario.remover_usuario(usuario_id)
-    
-    if success:
-        flash(result, 'success')
-    else:
-        flash(f'Erro ao remover usuário: {result}', 'error')
-    
-    return redirect(url_for('auth.gerenciar_usuarios'))
