@@ -139,7 +139,6 @@ Recup_Exp_Criativa/
 │   ├── main.py                      # Arquivo principal da aplicação
 │   ├── database.sql                 # Script SQL para criação do banco
 │   ├── README.md                    # Documentação interna
-│   ├── CORRECOES_APLICADAS.md      # Log de correções
 │   │
 │   ├── controllers/                 # Controladores (Blueprints)
 │   │   ├── auth_controller.py      # Autenticação e usuários
