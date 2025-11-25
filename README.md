@@ -317,7 +317,7 @@ Registro de pagamentos das comandas.
 | comanda_id       | INT (FK)     | ID da comanda                           |
 | valor            | FLOAT        | Valor do pagamento                      |
 | forma_pagamento  | VARCHAR(50)  | 'cartao_credito', 'cartao_debito', 'pix'|
-| status           | VARCHAR(20)  | 'pendente', 'aprovado', 'cancelado'     |
+| status           | VARCHAR(20)  | 'pendente', 'aprovado'                 |
 | processado_por_id| INT (FK)     | ID do usuário que processou             |
 | observacoes      | VARCHAR(255) | Observações adicionais                  |
 | created_at       | TIMESTAMP    | Data de criação                         |
