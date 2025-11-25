@@ -4,16 +4,16 @@ from models.itens_cardapio import ItemCardapio
 from models.comanda import Comanda
 from models.item_comanda import ItemComanda
 
-sensor_bp = Blueprint("cardapio", __name__)
+cardapio_bp = Blueprint("cardapio", __name__)
 
-@sensor_bp.route("/")
+@cardapio_bp.route("/")
 @login_required
 def cardapio():
     """Ver cardápio"""
     itens = ItemCardapio.get_itens_disponiveis()
     return render_template("cardapio.html", itens=itens)
 
-@sensor_bp.route("/abrir_comanda", methods=["POST"])
+@cardapio_bp.route("/abrir_comanda", methods=["POST"])
 @login_required
 def abrir_comanda():
     """Abrir nova comanda"""
@@ -45,7 +45,7 @@ def abrir_comanda():
     
     return redirect(url_for("auth.dashboard"))
 
-@sensor_bp.route("/adicionar_item", methods=["POST"])
+@cardapio_bp.route("/adicionar_item", methods=["POST"])
 @login_required
 def adicionar_item():
     """Adicionar item à comanda"""
@@ -99,7 +99,7 @@ def adicionar_item():
     
     return redirect(url_for("auth.dashboard"))
 
-@sensor_bp.route("/fechar_comanda/<int:comanda_id>", methods=["POST"])
+@cardapio_bp.route("/fechar_comanda/<int:comanda_id>", methods=["POST"])
 @login_required
 def fechar_comanda(comanda_id):
     """Fechar comanda - apenas atendente e caixa"""
@@ -134,7 +134,7 @@ def fechar_comanda(comanda_id):
     
     return redirect(url_for("auth.dashboard"))
 
-@sensor_bp.route("/editar_item/<int:item_id>", methods=["POST"])
+@cardapio_bp.route("/editar_item/<int:item_id>", methods=["POST"])
 @login_required
 def editar_item(item_id):
     """Editar quantidade de item da comanda - apenas atendente e caixa"""
@@ -144,7 +144,6 @@ def editar_item(item_id):
             flash("Apenas atendente ou caixa podem editar itens.", "error")
             return redirect(url_for("auth.dashboard"))
         
-        from models.item_comanda import ItemComanda
         item = ItemComanda.get_item_comanda(item_id)
         
         if not item:
@@ -179,7 +178,7 @@ def editar_item(item_id):
     
     return redirect(url_for("auth.dashboard"))
 
-@sensor_bp.route("/remover_item/<int:item_id>", methods=["POST"])
+@cardapio_bp.route("/remover_item/<int:item_id>", methods=["POST"])
 @login_required
 def remover_item(item_id):
     """Remover item da comanda - apenas atendente e caixa"""
@@ -189,7 +188,6 @@ def remover_item(item_id):
             flash("Apenas atendente ou caixa podem remover itens.", "error")
             return redirect(url_for("auth.dashboard"))
         
-        from models.item_comanda import ItemComanda
         item = ItemComanda.get_item_comanda(item_id)
         
         if not item:
@@ -221,7 +219,7 @@ def remover_item(item_id):
     
     return redirect(url_for("auth.dashboard"))
 
-@sensor_bp.route("/processar_pagamento/<int:comanda_id>", methods=["POST"])
+@cardapio_bp.route("/processar_pagamento/<int:comanda_id>", methods=["POST"])
 @login_required
 def processar_pagamento(comanda_id):
     """Processar pagamento - apenas caixa"""
