@@ -4,7 +4,7 @@ import os
 from dotenv import load_dotenv
 
 from controllers.auth_controller import auth_bp
-from controllers.sensor_controller import sensor_bp
+from controllers.cardapio_controller import cardapio_bp
 
 from models.db import db
 from models.usuarios import Usuario
@@ -49,7 +49,7 @@ def index():
 
 # Registrar blueprints
 app.register_blueprint(auth_bp)
-app.register_blueprint(sensor_bp, url_prefix='/cardapio')
+app.register_blueprint(cardapio_bp, url_prefix='/cardapio')
 
 # Criar tabelas do banco de dados
 def init_db():
