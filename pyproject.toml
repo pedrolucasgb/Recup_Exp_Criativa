@@ -1,0 +1,15 @@
+[project]
+name = "recup-exp-criativa"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "cryptography==41.0.7",
+    "flask==3.0.0",
+    "flask-login==0.6.3",
+    "flask-sqlalchemy==3.1.1",
+    "pymysql==1.1.0",
+    "python-dotenv>=1.2.1",
+    "werkzeug==3.0.1",
+]

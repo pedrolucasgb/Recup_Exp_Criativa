@@ -1,0 +1,215 @@
+{% extends "base.html" %}
+
+{% block title %}Gerenciar Usuários{% endblock %}
+
+{% block content %}
+<h1>👥 Gerenciamento de Usuários</h1>
+<p style="color: #666; margin-bottom: 2rem;">Área exclusiva para cadastro e gerenciamento de clientes e funcionários</p>
+
+<!-- Formulário de Cadastro -->
+<div class="card">
+    <h2>➕ Cadastrar Novo Usuário</h2>
+    <form method="POST" action="{{ url_for('auth.cadastrar_usuario') }}">
+        <div class="form-group">
+            <label>Nome Completo:</label>
+            <input type="text" name="nome" required placeholder="Ex: João Silva">
+        </div>
+        
+        <div class="form-group">
+            <label>Email:</label>
+            <input type="email" name="email" required placeholder="Ex: joao@email.com">
+        </div>
+        
+        <div class="form-group">
+            <label>Senha:</label>
+            <input type="password" name="senha" required minlength="6" placeholder="Mínimo 6 caracteres">
+        </div>
+        
+        <div class="form-group">
+            <label>Tipo de Usuário:</label>
+            <select name="tipo" required>
+                <option value="">-- Selecione o tipo --</option>
+                <option value="cliente">Cliente</option>
+                <option value="atendente">Atendente</option>
+            </select>
+        </div>
+        
+        <button type="submit" class="btn btn-success">Cadastrar Usuário</button>
+    </form>
+</div>
+
+<!-- Lista de Clientes -->
+<div class="card">
+    <h2>👨‍👩‍👧‍👦 Clientes Cadastrados</h2>
+    {% if clientes %}
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nome</th>
+                <th>Email</th>
+                <th>Status</th>
+                <th>Data Cadastro</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for cliente in clientes %}
+            <tr style="{% if not cliente.ativo %}opacity: 0.5;{% endif %}">
+                <td>{{ cliente.id }}</td>
+                <td>{{ cliente.nome }}</td>
+                <td>{{ cliente.email }}</td>
+                <td>
+                    {% if cliente.ativo %}
+                        <span style="color: green;">● Ativo</span>
+                    {% else %}
+                        <span style="color: red;">● Inativo</span>
+                    {% endif %}
+                </td>
+                <td>{{ cliente.created_at.strftime('%d/%m/%Y %H:%M') if cliente.created_at else '-' }}</td>
+                <td>
+                    <button onclick="editarUsuario({{ cliente.id }}, '{{ cliente.nome }}', '{{ cliente.email }}', '{{ cliente.tipo }}')" class="btn btn-primary" style="padding: 0.3rem 0.6rem; font-size: 0.85em; margin-right: 0.3rem;">✏️ Editar</button>
+                    
+                    {% if cliente.ativo %}
+                    <form method="POST" action="{{ url_for('auth.desativar_usuario', usuario_id=cliente.id) }}" style="display: inline; margin-right: 0.3rem;" onsubmit="return confirm('Desativar este usuário?')">
+                        <button type="submit" class="btn btn-danger" style="padding: 0.3rem 0.6rem; font-size: 0.85em;">🚫 Desativar</button>
+                    </form>
+                    {% else %}
+                    <form method="POST" action="{{ url_for('auth.ativar_usuario', usuario_id=cliente.id) }}" style="display: inline; margin-right: 0.3rem;">
+                        <button type="submit" class="btn btn-success" style="padding: 0.3rem 0.6rem; font-size: 0.85em;">✅ Ativar</button>
+                    </form>
+                    {% endif %}
+                    
+                    <form method="POST" action="{{ url_for('auth.remover_usuario', usuario_id=cliente.id) }}" style="display: inline;" onsubmit="return confirm('⚠️ ATENÇÃO: Esta ação é PERMANENTE e irá remover o usuário e todos os seus dados!\n\nDeseja realmente remover este usuário?')">
+                        <button type="submit" class="btn" style="background: #c0392b; color: white; padding: 0.3rem 0.6rem; font-size: 0.85em;">🗑️ Remover</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p style="text-align: center; color: #999; padding: 2rem;">Nenhum cliente cadastrado ainda.</p>
+    {% endif %}
+</div>
+
+<!-- Lista de Atendentes -->
+<div class="card">
+    <h2>🧑‍💼 Funcionários (Atendentes) Cadastrados</h2>
+    {% if atendentes %}
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nome</th>
+                <th>Email</th>
+                <th>Status</th>
+                <th>Data Cadastro</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for atendente in atendentes %}
+            <tr style="{% if not atendente.ativo %}opacity: 0.5;{% endif %}">
+                <td>{{ atendente.id }}</td>
+                <td>{{ atendente.nome }}</td>
+                <td>{{ atendente.email }}</td>
+                <td>
+                    {% if atendente.ativo %}
+                        <span style="color: green;">● Ativo</span>
+                    {% else %}
+                        <span style="color: red;">● Inativo</span>
+                    {% endif %}
+                </td>
+                <td>{{ atendente.created_at.strftime('%d/%m/%Y %H:%M') if atendente.created_at else '-' }}</td>
+                <td>
+                    <button onclick="editarUsuario({{ atendente.id }}, '{{ atendente.nome }}', '{{ atendente.email }}', '{{ atendente.tipo }}')" class="btn btn-primary" style="padding: 0.3rem 0.6rem; font-size: 0.85em; margin-right: 0.3rem;">✏️ Editar</button>
+                    
+                    {% if atendente.ativo %}
+                    <form method="POST" action="{{ url_for('auth.desativar_usuario', usuario_id=atendente.id) }}" style="display: inline; margin-right: 0.3rem;" onsubmit="return confirm('Desativar este usuário?')">
+                        <button type="submit" class="btn btn-danger" style="padding: 0.3rem 0.6rem; font-size: 0.85em;">🚫 Desativar</button>
+                    </form>
+                    {% else %}
+                    <form method="POST" action="{{ url_for('auth.ativar_usuario', usuario_id=atendente.id) }}" style="display: inline; margin-right: 0.3rem;">
+                        <button type="submit" class="btn btn-success" style="padding: 0.3rem 0.6rem; font-size: 0.85em;">✅ Ativar</button>
+                    </form>
+                    {% endif %}
+                    
+                    <form method="POST" action="{{ url_for('auth.remover_usuario', usuario_id=atendente.id) }}" style="display: inline;" onsubmit="return confirm('⚠️ ATENÇÃO: Esta ação é PERMANENTE e irá remover o usuário e todos os seus dados!\n\nDeseja realmente remover este usuário?')">
+                        <button type="submit" class="btn" style="background: #c0392b; color: white; padding: 0.3rem 0.6rem; font-size: 0.85em;">🗑️ Remover</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p style="text-align: center; color: #999; padding: 2rem;">Nenhum atendente cadastrado ainda.</p>
+    {% endif %}
+</div>
+
+<!-- Modal de Edição (oculto por padrão) -->
+<div id="editModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; justify-content: center; align-items: center;">
+    <div class="card" style="max-width: 500px; margin: 2rem;">
+        <h2>✏️ Editar Usuário</h2>
+        <form method="POST" id="editForm">
+            <input type="hidden" name="usuario_id" id="edit_usuario_id">
+            
+            <div class="form-group">
+                <label>Nome Completo:</label>
+                <input type="text" name="nome" id="edit_nome" required>
+            </div>
+            
+            <div class="form-group">
+                <label>Email:</label>
+                <input type="email" name="email" id="edit_email" required>
+            </div>
+            
+            <div class="form-group">
+                <label>Nova Senha (deixe em branco para não alterar):</label>
+                <input type="password" name="senha" id="edit_senha" placeholder="Deixe vazio para manter a senha atual">
+            </div>
+            
+            <div class="form-group">
+                <label>Tipo de Usuário:</label>
+                <select name="tipo" id="edit_tipo" required>
+                    <option value="cliente">Cliente</option>
+                    <option value="atendente">Atendente</option>
+                </select>
+            </div>
+            
+            <div style="display: flex; gap: 1rem;">
+                <button type="submit" class="btn btn-success">Salvar Alterações</button>
+                <button type="button" onclick="fecharModal()" class="btn btn-danger">Cancelar</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+function editarUsuario(id, nome, email, tipo) {
+    document.getElementById('edit_usuario_id').value = id;
+    document.getElementById('edit_nome').value = nome;
+    document.getElementById('edit_email').value = email;
+    document.getElementById('edit_tipo').value = tipo;
+    document.getElementById('edit_senha').value = '';
+    
+    const form = document.getElementById('editForm');
+    form.action = "{{ url_for('auth.editar_usuario') }}";
+    
+    document.getElementById('editModal').style.display = 'flex';
+}
+
+function fecharModal() {
+    document.getElementById('editModal').style.display = 'none';
+}
+
+// Fechar modal ao clicar fora
+document.getElementById('editModal').addEventListener('click', function(e) {
+    if (e.target === this) {
+        fecharModal();
+    }
+});
+</script>
+
+{% endblock %}

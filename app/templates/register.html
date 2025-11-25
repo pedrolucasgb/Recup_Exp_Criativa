@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block title %}Cadastro{% endblock %}
+
+{% block content %}
+<div class="card" style="max-width: 400px; margin: 3rem auto;">
+    <h1>📝 Cadastro de Cliente</h1>
+    <p style="color: #666; margin: 1rem 0;">Crie sua conta</p>
+    
+    <form method="POST">
+        <div class="form-group">
+            <label>Nome Completo:</label>
+            <input type="text" name="nome" required autofocus placeholder="Seu nome">
+        </div>
+        
+        <div class="form-group">
+            <label>Email:</label>
+            <input type="email" name="email" required placeholder="seu@email.com">
+        </div>
+        
+        <div class="form-group">
+            <label>Senha:</label>
+            <input type="password" name="password" required placeholder="Mínimo 6 caracteres">
+        </div>
+        
+        <button type="submit" class="btn btn-success" style="width: 100%;">Criar Conta</button>
+    </form>
+    
+    <p style="text-align: center; margin-top: 1rem;">
+        Já tem conta? <a href="{{ url_for('auth.login') }}">Fazer login</a>
+    </p>
+</div>
+{% endblock %}
