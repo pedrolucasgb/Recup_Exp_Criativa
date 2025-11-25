@@ -144,7 +144,6 @@ def editar_item(item_id):
             flash("Apenas atendente ou caixa podem editar itens.", "error")
             return redirect(url_for("auth.dashboard"))
         
-        from models.item_comanda import ItemComanda
         item = ItemComanda.get_item_comanda(item_id)
         
         if not item:
@@ -189,7 +188,6 @@ def remover_item(item_id):
             flash("Apenas atendente ou caixa podem remover itens.", "error")
             return redirect(url_for("auth.dashboard"))
         
-        from models.item_comanda import ItemComanda
         item = ItemComanda.get_item_comanda(item_id)
         
         if not item:
